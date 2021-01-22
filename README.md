@@ -1,70 +1,81 @@
-# Getting Started with Create React App
+# Samenvatting
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Context
 
-## Available Scripts
+- createContext
 
-In the project directory, you can run:
+Aanmaken van een context
+Wat krijg je dan terug???
 
-### `npm start`
+1. Provider gedeelte
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Aan de provider geef je mee welke props (data, functies) je beschikbaar wil maken aan de rest van de App.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Vaak zet je tussen de Provider opening tag en sluit tag de "props.children", dat is de rest van de app aan wie je data wil doorgeven
 
-### `npm test`
+Je "Wrapped" de App met de Provider
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2. Consumer ( in dit voorbeeld niet gebruikt )
 
-### `npm run build`
+- useContext (haalt de data van de context uit het Consumer gedeelte)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Hook die de data uit een Context object haalt
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Elke keer als data veranderd, worden de waarden automatische geupdate! (want het is een "hook")
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Custom hook (optioneel): useAuthState
 
-### `npm run eject`
+Haalt de authState op uit de AuthContext
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Geeft nog extra info mee:
+isAuthenticated
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+returned all deze data, zodat je die in je component kan gebruiken
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Wat is useHistory
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- Hook!
+- useHistory in React component gebruiken
+- Dan krijgen we iets terug ...
+- history object
+  - history.push() -> stuur de gebruiker naar een bepaalde pagina
+  - history.goBack() -> stuur de gebruiker naar vorige pagina
 
-## Learn More
+## Zijn er verschillen tussen Controlled Components & React Form
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Verschillen
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Controlled component:
 
-### Code Splitting
+Slaat de waarden van een input veld op in: State
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```javascript
+    value={username}
+    onChange={(e) => setUsername(e.target.value)}
+```
 
-### Analyzing the Bundle Size
+```javascript
+  <form onSubmit={onSubmit}>
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```javascript
+async function onSubmit(event) {
+    // Als je react-hook-form gebruikt hoeft dit niet, dat gebeurt dan automatisch
+    event.preventDefault(); // zorg dat je pagina niet refreshed
+```
 
-### Making a Progressive Web App
+Hookform:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Houdt de waarde bij voor je met de "useForm hook"
 
-### Advanced Configuration
+```javascript
+ref = { register };
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```javascript
+    <form onSubmit={handleSubmit(onSubmit)}>
+```
 
-### Deployment
+- Overeenkomsten
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- name, id, type etc. altijd goed om toe te voegen (accesibility)

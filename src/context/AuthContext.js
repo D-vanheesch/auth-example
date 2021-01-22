@@ -1,13 +1,14 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext({});
+// console.log("WHAT BE DIS?", AuthContext);
 
-function AuthContextProvider({ children }) {
+function AuthContextProvider(props) {
   const [authState, setAuthState] = useState({
-    status: 'pending',
+    status: "pending",
     error: null,
     user: null,
-  })
+  });
 
   useEffect(() => {
     // haal uit de local storage de JWT Token
@@ -19,14 +20,14 @@ function AuthContextProvider({ children }) {
       // er is geen token, dus we beginnen met een schone lei!
       setAuthState({
         ...authState,
-        status: 'done',
-      })
-    }, 2000)
+        status: "done",
+      });
+    }, 2000);
   }, []);
 
   function login(data) {
     // 1. de token willen we in de local storage zetten
-    localStorage.setItem('token', data.accessToken);
+    localStorage.setItem("token", data.accessToken);
 
     // 2. de user-informatie willen we in de context zetten
     setAuthState({
@@ -35,8 +36,8 @@ function AuthContextProvider({ children }) {
         username: data.username,
         email: data.email,
         roles: data.roles,
-      }
-    })
+      },
+    });
 
     // 3. als dat allemaal gelukt is, willen we doorgelinkt worden naar de profielpagina!
     // Dit doen we in het component dat deze functie aanroept, zelf!
@@ -49,7 +50,7 @@ function AuthContextProvider({ children }) {
     setAuthState({
       ...authState,
       user: null,
-    })
+    });
   }
 
   // als je hem helemaal uit zou schrijven en als variabele mee zou geven aan AuthContext.Provider:
@@ -59,20 +60,22 @@ function AuthContextProvider({ children }) {
   //   logout: logout,
   // };
 
+  // console.log("Ik wist niet dat ik kinderen had?", props.children);
   return (
     <AuthContext.Provider value={{ ...authState, login, logout }}>
-      {authState.status === 'done' && children}
-      {authState.status === 'pending' && <p>Loading...</p>}
+      {authState.status === "done" && props.children}
+      {authState.status === "pending" && <p>Loading...</p>}
     </AuthContext.Provider>
   );
 }
 
 function useAuthState() {
   const authState = useContext(AuthContext);
+  // console.log("Welke waarden zitten in de authContext:", authState);
 
   // iemand is geauthoriseerd wanneer de status === 'done'
   // en als er een gebruiker in de authState staat
-  const isDone = authState.status === 'done';
+  const isDone = authState.status === "done";
   const isAuthenticated = authState.user !== null && isDone;
 
   // console.log('Ik ben authenticated:', isAuthenticated);
@@ -80,11 +83,7 @@ function useAuthState() {
   return {
     ...authState,
     isAuthenticated: isAuthenticated,
-  }
+  };
 }
 
-export {
-  AuthContext,
-  useAuthState,
-  AuthContextProvider,
-}
+export { AuthContext, useAuthState, AuthContextProvider };
